@@ -1,0 +1,78 @@
+.titulo {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .card {
+    height: 100%;
+  }
+  
+  .cardContentWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  .cardMediaWrapper {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+
+  .cardMedia {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
+  }
+  
+  .tituloProducto {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .precioProducto {
+    font-size: 0.9rem;
+  }
+  
+  .botonesWrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+  }
+  
+  .buttonstore {
+    background-color: #3f51b5;
+    color: white;
+    position: relative;
+    overflow: hidden; /* Oculta cualquier contenido que se salga del área del botón */
+    transition: background-color 0.3s; /* Agregamos una transición suave al color de fondo */
+  }
+  
+  .buttonstore::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%; /* Un valor mayor que cubra completamente el botón */
+    height: 300%; /* Un valor mayor que cubra completamente el botón */
+    background-color: rgba(0, 0, 0, 0); /* Inicialmente transparente */
+    transition: background-color 0.3s; /* Agregamos una transición suave al color de fondo */
+    border-radius: 50%; /* Hacemos el pseudo-elemento circular */
+    transform: translate(-50%, -50%); /* Centramos el pseudo-elemento */
+  }
+  
+  .buttonstore:hover::before {
+    background-color: rgba(0, 0, 0, 0.3); /* Color de fondo con opacidad para el hover */
+  }
+  
+  .buttonstore:hover {
+    background-color: #303f9f; /* Cambiamos el color de fondo del botón en el hover */
+  }
+  
+  
+  .linkDetalles {
+    text-decoration: none;
+  }
+  
