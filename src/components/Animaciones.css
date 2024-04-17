@@ -1,0 +1,21 @@
+
+.card {
+    transition: transform 0.3s ease;
+    height: 100%; 
+    margin: 20px;
+  }
+  
+  .card:hover {
+    transform: scale(1.05);
+  }
+  
+  .cardContent {
+    height: 200px; 
+    overflow: hidden; 
+  }
+  
+  .cardMedia {
+    height: 250px; 
+    object-fit: contain;
+  }
+  
