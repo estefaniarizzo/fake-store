@@ -17,8 +17,12 @@ function App() {
 
   // Función para quitar un producto del carrito
   const quitarDelCarrito = (id) => {
-    const nuevoCarrito = carrito.filter((producto) => producto.id !== id);
-    setCarrito(nuevoCarrito);
+    const index = carrito.findIndex((producto) => producto.id === id);
+    if (index !== -1) {
+      const nuevoCarrito = [...carrito];
+      nuevoCarrito.splice(index, 1); // Eliminar el producto del array
+      setCarrito(nuevoCarrito);
+    }
   };
 
   return (

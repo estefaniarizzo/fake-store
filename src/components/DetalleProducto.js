@@ -53,7 +53,7 @@ const DetalleProducto = ({ agregarAlCarrito }) => {
               <Typography variant="h4" component="h1">
                 {producto.title}
               </Typography>
-              <Typography variant="h6" color="textSecondary" component="p">
+              <Typography variant="h6" color="black" component="p">
                 Precio: ${producto.price}
               </Typography>
               <Typography variant="body1" component="p" style={{ marginTop: 20 }}>
@@ -67,11 +67,11 @@ const DetalleProducto = ({ agregarAlCarrito }) => {
                   style={{ backgroundColor: '#3f51b5', color: 'white', marginRight: '10px' }}
                   className='buttonstore'
                 >
-                  Agregar al carrito
+                  Agregar 
                 </Button>
                 <Link to="/" style={{ textDecoration: 'none', display: 'block' }}>
                   <Button variant="outlined" className='buttonstore'  style={{ backgroundColor: '#3f51b5', color: 'white' }}>
-                    Volver a la lista de productos
+                    Volver 
                   </Button>
                 </Link>
               </div>
@@ -96,7 +96,7 @@ const DetalleProducto = ({ agregarAlCarrito }) => {
                     <Typography variant="subtitle1" component="h2">
                       {relacionado.title}
                     </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
+                    <Typography variant="body2" color="black" component="p">
                       Precio: ${relacionado.price}
                     </Typography>
                     <Button

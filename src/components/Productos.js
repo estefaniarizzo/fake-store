@@ -134,7 +134,7 @@ const Productos = ({ agregarAlCarrito }) => {
                         <Typography gutterBottom variant="h5" component="h2" className="tituloProducto">
                           {producto.title}
                         </Typography>
-                        <Typography variant="body2" color="textSecondary" component="p" className="precioProducto">
+                        <Typography variant="body2" color="black" component="p" className="precioProducto" style={{fontSize:'17px'}}>
                           Precio: ${producto.price}
                         </Typography>
                       </CardContent>
