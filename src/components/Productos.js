@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Card, CardContent, Typography, Button, CardMedia, CircularProgress, FormControl, InputLabel, Select, MenuItem, TextField } from '@mui/material';
+import { Grid, Card, CardContent, Typography, Button, CardMedia, CircularProgress, FormControl, InputLabel, Select, MenuItem, TextField, Box } from '@mui/material';
 import './Productos.css'; // Importamos el archivo de estilos CSS para los productos
 
 const Productos = ({ agregarAlCarrito }) => {
@@ -68,33 +68,33 @@ const Productos = ({ agregarAlCarrito }) => {
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <TextField
-          id="busqueda"
-          label="Buscar productos"
-          variant="outlined"
-          fullWidth
-          value={inputUsuario}
-          onChange={handleInputUsuarioChange}
-          onKeyPress={handleKeyPress}
-          style={{ width: '45%', marginRight: '20px', marginLeft:'20px'}}
-        />
-        <FormControl variant="outlined" style={{ width: '190px', marginRight: '20px'}}>
-          <InputLabel id="filtro-categoria-label">Filtrar por Categoría</InputLabel>
-          <Select
-            labelId="filtro-categoria-label"
-            id="filtro-categoria-select"
-            value={filtroCategoria}
-            onChange={handleCategoriaChange}
-            label="Filtrar por Categoría"
-          >
-            <MenuItem value="Todas">Todas</MenuItem>
-            {categorias.map(categoria => (
-              <MenuItem key={categoria} value={categoria}>{categoria}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </div>
+      <Box display="flex" justifyContent="space-between" alignItems="center" padding="0 20px">
+      <TextField
+        id="busqueda"
+        label="Buscar productos"
+        variant="outlined"
+        fullWidth
+        value={inputUsuario}
+        onChange={handleInputUsuarioChange}
+        onKeyPress={handleKeyPress}
+        style={{ flex: '1', marginRight: '20px' }}
+      />
+      <FormControl variant="outlined" style={{ flex: '0 0 190px' }}>
+        <InputLabel id="filtro-categoria-label">Filtrar por Categoría</InputLabel>
+        <Select
+          labelId="filtro-categoria-label"
+          id="filtro-categoria-select"
+          value={filtroCategoria}
+          onChange={handleCategoriaChange}
+          label="Filtrar por Categoría"
+        >
+          <MenuItem value="Todas">Todas</MenuItem>
+          {categorias.map(categoria => (
+            <MenuItem key={categoria} value={categoria}>{categoria}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </Box>
       {cargando ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
           <CircularProgress />
@@ -113,15 +113,15 @@ const Productos = ({ agregarAlCarrito }) => {
               </Button>
             ))}
           </div>
-          <Grid container spacing={3} justifyContent="center" style={{ margin: '20px', width: '1500px' }}>
+          <Grid container spacing={3} justifyContent="center" style={{ margin: '1px', maxWidth: '100%' }}>
             {productos
               .filter(filtrarPorCategoria)
               .slice((paginaActual - 1) * productosPorPagina, paginaActual * productosPorPagina)
               .map(producto => (
                 <Grid item key={producto.id} xs={12} sm={6} md={4}>
-                  <Card elevation={3} className="card" style={{ margin: '10px' }}>
-                    <div className="cardContentWrapper">
-                      <div className="cardMediaWrapper">
+                  <Card elevation={3} className="card" style={{ margin: '10px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <div className="cardContentWrapper" style={{ flex: 1 }}>
+                      <div className="cardMediaWrapper" style={{ flex: 1 }}>
                         <CardMedia
                           component="img"
                           className="cardMedia"
@@ -137,17 +137,17 @@ const Productos = ({ agregarAlCarrito }) => {
                         <Typography variant="body2" color="textSecondary" component="p" className="precioProducto">
                           Precio: ${producto.price}
                         </Typography>
-                        <div className="botonesWrapper">
-                          <Button variant="contained" className='buttonstore' style={{ backgroundColor: '#3f51b5', color: 'white', marginRight: '10px' }} onClick={() => agregarAlCarrito(producto)}>
-                            Agregar al carrito
-                          </Button>
-                          <Link to={`/productos/${producto.id}`} style={{ textDecoration: 'none' }}>
-                            <Button variant="outlined" className='buttonstore' style={{ backgroundColor: '#3f51b5', color: 'white' }}>
-                              Ver Detalles
-                            </Button>
-                          </Link>
-                        </div>
                       </CardContent>
+                    </div>
+                    <div className="botonesWrapper" style={{ padding: '10px', borderTop: '1px solid #ddd' }}>
+                      <Button variant="contained" className='buttonstore' style={{ backgroundColor: '#3f51b5', color: 'white', marginRight: '10px', width: '100%' }} onClick={() => agregarAlCarrito(producto)}>
+                        Agregar 
+                      </Button>
+                      <Link to={`/productos/${producto.id}`} style={{ textDecoration: 'none' }}>
+                        <Button variant="outlined" className='buttonstore' style={{ backgroundColor: '#3f51b5', color: 'white', width: '100%' }}>
+                          Ver 
+                        </Button>
+                      </Link>
                     </div>
                   </Card>
                 </Grid>

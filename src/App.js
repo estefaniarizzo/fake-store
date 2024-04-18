@@ -6,6 +6,7 @@ import DetalleProducto from './components/DetalleProducto';
 import CarritoCompra from './components/CarritoCompra';
 import CarritoIndicador from './components/CarritoIndicador'; 
 import './App.css';
+
 function App() {
   const [carrito, setCarrito] = useState([]);
 
@@ -23,7 +24,7 @@ function App() {
   return (
     <Router>
       <div style={{ marginBottom: '20px', textAlign: 'end' }} className="App transition fadeIn"> 
-        <CarritoIndicador cantidadProductos={carrito.length} />
+        <CarritoIndicador cantidadProductos={carrito.length} carrito={carrito} quitarDelCarrito={quitarDelCarrito} />
       </div>
       <Routes>
         <Route path="/" element={<Productos agregarAlCarrito={agregarAlCarrito} />} />
