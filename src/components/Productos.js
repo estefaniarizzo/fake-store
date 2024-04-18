@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Card, CardContent, Typography, Button, CardMedia, CircularProgress, FormControl, InputLabel, Select, MenuItem, TextField, Box } from '@mui/material';
-import './Productos.css'; // Importamos el archivo de estilos CSS para los productos
+import { Grid, Card, CardContent, Typography, Button, CardMedia, CircularProgress, FormControl, InputLabel, Select, MenuItem, TextField, Box, IconButton, Menu} from '@mui/material';
+import { Favorite, FavoriteBorder, ShoppingCart } from '@mui/icons-material';
+import './Productos.css';
 
 const Productos = ({ agregarAlCarrito }) => {
   const [productosOriginales, setProductosOriginales] = useState([]);
@@ -11,6 +12,8 @@ const Productos = ({ agregarAlCarrito }) => {
   const [filtroCategoria, setFiltroCategoria] = useState('');
   const [paginaActual, setPaginaActual] = useState(1);
   const [inputUsuario, setInputUsuario] = useState('');
+  const [productosFavoritos, setProductosFavoritos] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
   const productosPorPagina = 6;
 
   useEffect(() => {
@@ -66,35 +69,74 @@ const Productos = ({ agregarAlCarrito }) => {
   // Calcular la cantidad total de páginas
   const cantidadTotalPaginas = Math.ceil(productos.filter(filtrarPorCategoria).length / productosPorPagina);
 
+  // Función para agregar o quitar productos de la lista de favoritos
+  const toggleProductoFavorito = (productoId) => {
+    const index = productosFavoritos.findIndex(producto => producto.id === productoId);
+    if (index === -1) {
+      // Si el producto no está en favoritos, agregarlo
+      const productoFavorito = productosOriginales.find(producto => producto.id === productoId);
+      setProductosFavoritos([...productosFavoritos, productoFavorito]);
+    } else {
+      // Si el producto está en favoritos, quitarlo
+      const nuevosFavoritos = productosFavoritos.filter(producto => producto.id !== productoId);
+      setProductosFavoritos(nuevosFavoritos);
+    }
+  };
+
+  // Función para abrir el menú de productos favoritos
+  const handleFavoritosClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // Función para cerrar el menú de productos favoritos
+  const handleFavoritosClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <div>
       <Box display="flex" justifyContent="space-between" alignItems="center" padding="0 20px">
-      <TextField
-        id="busqueda"
-        label="Buscar productos"
-        variant="outlined"
-        fullWidth
-        value={inputUsuario}
-        onChange={handleInputUsuarioChange}
-        onKeyPress={handleKeyPress}
-        style={{ flex: '1', marginRight: '20px' }}
-      />
-      <FormControl variant="outlined" style={{ flex: '0 0 190px' }}>
-        <InputLabel id="filtro-categoria-label">Filtrar por Categoría</InputLabel>
-        <Select
-          labelId="filtro-categoria-label"
-          id="filtro-categoria-select"
-          value={filtroCategoria}
-          onChange={handleCategoriaChange}
-          label="Filtrar por Categoría"
+        <TextField
+          id="busqueda"
+          label="Buscar productos"
+          variant="outlined"
+          fullWidth
+          value={inputUsuario}
+          onChange={handleInputUsuarioChange}
+          onKeyPress={handleKeyPress}
+          style={{ flex: '1', marginRight: '20px' }}
+        />
+        <FormControl variant="outlined" style={{ flex: '0 0 190px' }}>
+          <InputLabel id="filtro-categoria-label">Filtrar por Categoría</InputLabel>
+          <Select
+            labelId="filtro-categoria-label"
+            id="filtro-categoria-select"
+            value={filtroCategoria}
+            onChange={handleCategoriaChange}
+            label="Filtrar por Categoría"
+          >
+            <MenuItem value="Todas">Todas</MenuItem>
+            {categorias.map(categoria => (
+              <MenuItem key={categoria} value={categoria}>{categoria}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <IconButton aria-label="favoritos" onClick={handleFavoritosClick} style={{ color: '#FF0000' }}>
+          <Favorite />
+        </IconButton>
+        <Menu
+          id="menu-favoritos"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleFavoritosClose}
         >
-          <MenuItem value="Todas">Todas</MenuItem>
-          {categorias.map(categoria => (
-            <MenuItem key={categoria} value={categoria}>{categoria}</MenuItem>
+          {productosFavoritos.map((producto) => (
+            <MenuItem key={producto.id} onClick={handleFavoritosClose}>
+              <Typography variant="body1">{producto.title}</Typography>
+            </MenuItem>
           ))}
-        </Select>
-      </FormControl>
-    </Box>
+        </Menu>
+      </Box>
       {cargando ? (
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
           <CircularProgress />
@@ -119,7 +161,13 @@ const Productos = ({ agregarAlCarrito }) => {
               .slice((paginaActual - 1) * productosPorPagina, paginaActual * productosPorPagina)
               .map(producto => (
                 <Grid item key={producto.id} xs={12} sm={6} md={4}>
-                  <Card elevation={3} className="card" style={{ margin: '10px', height: '100%', display: 'flex', flexDirection: 'column' }}>
+                  <Card elevation={3} className="card" style={{ margin: '10px', height: '100%', display: 'flex', flexDirection: 'column', position: 'relative' }}>
+                    <IconButton
+                      style={{ position: 'absolute', top: '5px', left: '5px', zIndex: '1' }}
+                      onClick={() => toggleProductoFavorito(producto.id)}
+                    >
+                      {productosFavoritos.find(favorito => favorito.id === producto.id) ? <Favorite color="error" /> : <FavoriteBorder />}
+                    </IconButton>
                     <div className="cardContentWrapper" style={{ flex: 1 }}>
                       <div className="cardMediaWrapper" style={{ flex: 1 }}>
                         <CardMedia
@@ -134,18 +182,18 @@ const Productos = ({ agregarAlCarrito }) => {
                         <Typography gutterBottom variant="h5" component="h2" className="tituloProducto">
                           {producto.title}
                         </Typography>
-                        <Typography variant="body2" color="black" component="p" className="precioProducto" style={{fontSize:'17px'}}>
+                        <Typography variant="body2" color="black" component="p" className="precioProducto" style={{ fontSize: '17px' }}>
                           Precio: ${producto.price}
                         </Typography>
                       </CardContent>
                     </div>
                     <div className="botonesWrapper" style={{ padding: '10px', borderTop: '1px solid #ddd' }}>
                       <Button variant="contained" className='buttonstore' style={{ backgroundColor: '#3f51b5', color: 'white', marginRight: '10px', width: '100%' }} onClick={() => agregarAlCarrito(producto)}>
-                        Agregar 
+                        Agregar
                       </Button>
                       <Link to={`/productos/${producto.id}`} style={{ textDecoration: 'none' }}>
                         <Button variant="outlined" className='buttonstore' style={{ backgroundColor: '#3f51b5', color: 'white', width: '100%' }}>
-                          Ver 
+                          Ver
                         </Button>
                       </Link>
                     </div>
